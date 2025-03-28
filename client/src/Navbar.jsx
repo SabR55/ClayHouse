@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Menu, Parentheses, X } from 'lucide-react';
+import LoginModal from './pages/LoginModal';
 
 function Navbar() {
     
-    const [isLoggedin, setLoggedIn] = useState(true);
+    const [isLoggedin, setLoggedIn] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     const [workshopOpen, setWorkshopOpen] = useState(false);
     const [rentalsOpen, setRentalsOpen] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const [isOpen, setIsOpen] = useState(false);
+    
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
     
     const toggleWorkshop = () => {
         setWorkshopOpen(!workshopOpen);
@@ -22,19 +30,15 @@ function Navbar() {
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
-    function login() {
-        
-    }
-
 
     return(
         <div>
             {/* Desktop Navigation. Hidden in Mobile view */}
-            <div className='navbar navbarTopRow text-lg hidden md:flex justify-between' onClick={login}>
+            <div className='navbar navbarTopRow text-lg hidden md:flex justify-between'>
                 <a className='font-bold text-xl'>Clay House</a>
 
                 {!isLoggedin ? (
-                    <a>Login/Register</a>) 
+                    <a onClick={openModal}>Login/Register</a>) 
                     : (
                     <a>User Name</a>
                     )}
@@ -173,7 +177,21 @@ function Navbar() {
                 </div>
             )}
 
-            
+            {/* Modal Backdrop */}
+            {isOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+
+                    {/* Separate backdrop div with the background */}
+                    <div className="absolute inset-0 bg-black opacity-50"></div>
+
+                    {/* Modal content positioned above the backdrop */}
+                    <div className="z-10 relative">
+                        <LoginModal
+                            closeModal={closeModal}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

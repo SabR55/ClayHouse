@@ -5,7 +5,7 @@ body {
 }
 
 
-
+/* ----- Navbar ----- */
 .navbar {
   font-family: "Josefin Sans", sans-serif;
   padding: 16px 10%;
@@ -41,4 +41,19 @@ body {
     padding: 8px 16px;
   }
 
+}
+
+/* ----- Input Box ----- */
+.inputBox {
+  border-bottom: 1px solid #B6A593;
+}
+
+.inputBox:focus{
+  background-color: #E2D9CD;
+  border: none;
+}
+
+.buttonBrown {
+  background-color: #392E26;
+  color: #FCF8F0;
 }
