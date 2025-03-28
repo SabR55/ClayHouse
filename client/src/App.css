@@ -1,0 +1,44 @@
+body {
+  font-family: "Prompt", sans-serif;
+  color: #392E26;
+  background-color: #FCF8F0;
+}
+
+
+
+.navbar {
+  font-family: "Josefin Sans", sans-serif;
+  padding: 16px 10%;
+}
+
+
+.navbarTopRow {
+  border-bottom: 1px solid #B6A593;
+}
+
+.navberItem {
+  padding: 16px 25px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.navDropdownItem {
+  padding: 16px 25px;
+  font-weight: 400;
+}
+
+.navDropdownItem:hover {
+  background-color: #E2D9CD;
+}
+
+/* Mobile view padding */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 16px; /* Reduced padding for mobile */
+  }
+
+  .navberItem, .navDropdownItem {
+    padding: 8px 16px;
+  }
+
+}
