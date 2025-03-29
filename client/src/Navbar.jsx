@@ -57,6 +57,10 @@ function Navbar() {
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
+    function toProfile() {
+        navigate('/profile');
+    }
+
     function handleLogout() {
         
         // Clear all items from localStorage
@@ -85,7 +89,7 @@ function Navbar() {
                             onMouseLeave={() => setUserOpen(false)}
                             >
                             {/* Trigger element */}
-                            <a className="pr-1 cursor-pointer">Hi {userName}</a>
+                            <a className="pr-1 cursor-pointer">Hi {userName}!</a>
                             
                             
                             {/* Dropdown menu */}
@@ -94,12 +98,14 @@ function Navbar() {
                                 onMouseEnter={() => setUserOpen(true)}
                                 onMouseLeave={() => setUserOpen(false)}
                             >
-                                <a href="#profile" className="navDropdownItem userDropdown block">
-                                    <div className="flex items-center justify-end px-4">
+                                <a className="navDropdownItem userDropdown block">
+                                    <div 
+                                        className="flex items-center justify-end px-4"
+                                        onClick={toProfile}>
                                         Profile
                                     </div>
                                 </a>
-                                <a href="#logout" className="navDropdownItem userDropdown block">
+                                <a className="navDropdownItem userDropdown block">
                                     <div 
                                         className="flex items-center justify-end px-4"
                                         onClick={handleLogout}>
@@ -171,7 +177,7 @@ function Navbar() {
                 
                 <div 
                     className="navbar font-bold text-xl cursor-pointer" 
-                    onClick={() => navigate('/')}
+                    onClick={() => {navigate('/'); setMobileMenuOpen(false)}}
                     >
                     Clay House
                     </div>
@@ -183,11 +189,11 @@ function Navbar() {
             {mobileMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1">
-                        <div className='navberItem' onClick={!(userName == null) ? openModal : () => navigate('/')}>
-                            {!(userName == null) ? (
+                        <div className='navberItem' onClick={(userName == null) ? openModal : toProfile }>
+                            {(userName == null) ? (
                             <a>Login/Register</a>) 
                             : (
-                            <a>User Name</a>
+                            <a>Hi {userName}!</a>
                             )}
                         </div>
 
@@ -245,6 +251,12 @@ function Navbar() {
 
                         <a className='navberItem block'>FAQ</a>
                         <a className='navberItem block'>Contact</a>
+                        {(userName != null) && 
+                            <a 
+                                className='navberItem block'
+                                onClick={handleLogout}
+                                >
+                                Logout</a>}
                         </div>
                 </div>
             )}
