@@ -5,7 +5,6 @@ import axios from 'axios';
 
 
 function Register() {
-
     
     const [showPassword, setShowPassword] = useState(false);                // Toggle password visibility
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Toggle password visibility
@@ -44,12 +43,11 @@ function Register() {
             return;
 
         }
-        
+
         setConfirmationModal(true);
 
         try {
             axios.post('/register', formData);
-
             console.log(formData);
 
             // Return user to homepage
@@ -71,7 +69,7 @@ function Register() {
                 <a className="text-2xl"> Register</a>
             </div>
 
-            <div className="flex justify-center border-1 py-8">
+            <div className="flex justify-center py-8">
                 <form className="p-8 grid gric-cols-1 gap-6 w-80" onSubmit={handleRegister}>
                     <div>
                         <label className="font-medium">
@@ -168,7 +166,7 @@ function Register() {
                         {/* Error message visible when passwords do not match */}
                         {pwdMatchErrMsg && (
                             <div className="pt-2">
-                                <a className="text-red-700">Passwords do not match.</a>
+                                <a className="text-red-700">Passwords do not match</a>
                             </div>
                         )}
                     </div>

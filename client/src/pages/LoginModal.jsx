@@ -1,28 +1,70 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { X } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function LoginModal({ closeModal }) {
+
+    const [loginErr, setLoginErr] = useState(null);
+    const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     
-    const handleLogin = (e) => {
-        e.preventDefault();
-        // Handle login logic here
-        console.log('Login attempt with:', formData);
-        closeModal();
-        // Reset form
-        setFormData({ email: '', password: '' });
-      };
-    
-    const handleChange = (field, value) => {
+    const handleChange = (id, value) => {
         setFormData({
           ...formData,
-          [field]: value
+          [id]: value
         });
+    };
+
+    async function handleLogin(e) {
+        e.preventDefault();
+
+        console.log('Login attempt with:', formData);
+
+        try {
+            
+            // Check if user exists
+            const response = await axios.post('/login', formData);
+
+            // Log the entire response to see what you're getting
+            console.log("Response data:", response.data); // works
+
+            // Save userID and userName to state and localStorage
+            const setUser = response.data;
+            
+            const userStorageData = {
+                userID: setUser.userID,
+                userName: setUser.userName
+            };
+            
+            // Convert the object to a string
+            const userStorageString = JSON.stringify(userStorageData);
+            
+            // Save to localStorage with a key of your choice
+            localStorage.setItem('userInfo', userStorageString);
+
+            closeModal();
+
+            // Return to homepage
+            // navigate('/')
+            window.location.href = '/';
+
+        } catch (error) {
+            console.error("Login Error:", error); // Debugging
+            console.log(error.response.data?.msg)
+
+            // Ensure we handle cases where no response is received
+            if (error.response) {
+                setLoginErr(error.response.data?.msg || "Login failed. Please try again.");
+            } else {
+                setLoginErr("Something went wrong. Please try again.");
+            }
+        }
     };
   
 
@@ -79,12 +121,21 @@ function LoginModal({ closeModal }) {
                     placeholder="password"
                     required
                     />
+
+                    {/* Error message visible when passwords do not match */}
+                    {loginErr && (
+                        <div className="pt-2">
+                            <a className="text-red-700">{loginErr}</a>
+                        </div>
+                    )}
                 </div>
+
+                
 
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="buttonBrown w-full pt- font-medium py-2 rounded-md shadow cursor-pointer"
+                    className="buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
                 >
                     Login
                 </button>

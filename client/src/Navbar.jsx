@@ -1,23 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Menu, Parentheses, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './pages/LoginModal';
 
 function Navbar() {
     
-    const [isLoggedin, setLoggedIn] = useState(false);              // Check login status
+    //const [isLoggedin, setLoggedIn] = useState(false);              // Check login status
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);    // Toggle mobile menu open/close
 
     const [workshopOpen, setWorkshopOpen] = useState(false);        // Toggle Workshops dropdown menu
     const [rentalsOpen, setRentalsOpen] = useState(false);          // Toggle Rentals dropdown menu
+    const [userOpen, setUserOpen] = useState(false);
 
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);// Login modal open/close
 
     const navigate = useNavigate();
     
-
     const openModal = () => setIsLoginModalOpen(true);
     const closeModal = () => {setIsLoginModalOpen(false); setMobileMenuOpen(false);}
+
+    const [userName, setUserName] = useState(null);
+
+    useEffect(() => {
+        
+        // Check localStorage for user data when component mounts
+        const getUserFromStorage = () => {
+          
+            const userDataString = localStorage.getItem('userInfo');
+          
+            if (userDataString) {
+                try {
+                const userData = JSON.parse(userDataString);
+                if (userData.userName) {
+                    setUserName(userData.userName);
+                }
+                } catch (error) {
+                console.error('Error parsing user data from localStorage:', error);
+                }
+          }
+        };
+        
+        getUserFromStorage();
+    }, []);
     
     const toggleWorkshop = () => {
         setWorkshopOpen(!workshopOpen);
@@ -33,6 +57,15 @@ function Navbar() {
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
+    function handleLogout() {
+        
+        // Clear all items from localStorage
+        localStorage.clear();
+
+        // Redirect to homepage
+        window.location.href = '/';
+    }
+
 
     return(
         <div>
@@ -43,10 +76,38 @@ function Navbar() {
                     onClick={() => navigate('/')}
                     >Clay House</a>
 
-                {!isLoggedin ? (
+                {(userName == null) ? (
                     <a onClick={openModal}>Login/Register</a>) 
                     : (
-                    <a>User Name</a>
+                        <div 
+                            className="relative group"
+                            onMouseEnter={() => setUserOpen(true)}
+                            onMouseLeave={() => setUserOpen(false)}
+                            >
+                            {/* Trigger element */}
+                            <a className="pr-1 cursor-pointer">Hi {userName}</a>
+                            
+                            
+                            {/* Dropdown menu */}
+                            <div 
+                                className={`absolute right-0 bg-white shadow-lg ${userOpen ? 'block' : 'hidden'}`}
+                                onMouseEnter={() => setUserOpen(true)}
+                                onMouseLeave={() => setUserOpen(false)}
+                            >
+                                <a href="#profile" className="navDropdownItem userDropdown block">
+                                    <div className="flex items-center justify-end px-4">
+                                        Profile
+                                    </div>
+                                </a>
+                                <a href="#logout" className="navDropdownItem userDropdown block">
+                                    <div 
+                                        className="flex items-center justify-end px-4"
+                                        onClick={handleLogout}>
+                                        Logout
+                                    </div>
+                                </a>
+                            </div>
+                            </div>
                     )}
             </div>
 
@@ -68,8 +129,8 @@ function Navbar() {
                         onMouseEnter={() => setWorkshopOpen(true)}
                         onMouseLeave={() => setWorkshopOpen(false)}
                         >
-                    <a href="#" className="navDropdownItem block py-2">Trial Class</a>
-                    <a href="#" className="navDropdownItem block py-2">Regular Workshops</a>
+                        <a href="#" className="navDropdownItem block py-2">Trial Class</a>
+                        <a href="#" className="navDropdownItem block py-2">Regular Workshops</a>
                     </div>
 
                     
@@ -90,8 +151,8 @@ function Navbar() {
                         onMouseEnter={() => setRentalsOpen(true)}
                         onMouseLeave={() => setRentalsOpen(false)}
                         >
-                    <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Kiln Rental</a>
-                    <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Studio Rental</a>
+                        <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Kiln Rental</a>
+                        <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Studio Rental</a>
                     </div>
                 </div>
 
@@ -122,8 +183,8 @@ function Navbar() {
             {mobileMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1">
-                        <div className='navberItem' onClick={!isLoggedin ? openModal : () => navigate('/')}>
-                            {!isLoggedin ? (
+                        <div className='navberItem' onClick={!(userName == null) ? openModal : () => navigate('/')}>
+                            {!(userName == null) ? (
                             <a>Login/Register</a>) 
                             : (
                             <a>User Name</a>

@@ -27,6 +27,39 @@ app.get('/test', (req, res) => {
     res.json('test ok');
 });
 
+// -----  Retrieve new User. Login -----
+app.post('/login', async (req, res) => {
+
+    try {
+        const formData = req.body;
+
+        const user = await User.findOne({userEmail: formData.email});
+
+        // Check if user exists
+        if (!user) {
+            return res.status(400).json({ msg: "User does not exist" });
+        }
+
+        // Verify password
+        const isPasswordValid = await bcrypt.compare(formData.password, user.userPassword);
+
+        if (!isPasswordValid) {
+            return res.status(400).json({ msg: "Incorrect password" });
+        }
+
+        const responseData = {
+            userID: user.userID,
+            userName: user.userName
+        };
+
+        res.json(responseData);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}); 
+
+
 // -----  Create a new User -----
 app.post('/register', async (req, res) => {
     
