@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Menu, Parentheses, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import LoginModal from './pages/LoginModal';
 
 function Navbar() {
     
-    const [isLoggedin, setLoggedIn] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isLoggedin, setLoggedIn] = useState(false);              // Check login status
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);    // Toggle mobile menu open/close
 
-    const [workshopOpen, setWorkshopOpen] = useState(false);
-    const [rentalsOpen, setRentalsOpen] = useState(false);
+    const [workshopOpen, setWorkshopOpen] = useState(false);        // Toggle Workshops dropdown menu
+    const [rentalsOpen, setRentalsOpen] = useState(false);          // Toggle Rentals dropdown menu
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);// Login modal open/close
+
+    const navigate = useNavigate();
     
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+    const openModal = () => setIsLoginModalOpen(true);
+    const closeModal = () => {setIsLoginModalOpen(false); setMobileMenuOpen(false);}
     
     const toggleWorkshop = () => {
         setWorkshopOpen(!workshopOpen);
@@ -35,7 +38,10 @@ function Navbar() {
         <div>
             {/* Desktop Navigation. Hidden in Mobile view */}
             <div className='navbar navbarTopRow text-lg hidden md:flex justify-between'>
-                <a className='font-bold text-xl'>Clay House</a>
+                <a 
+                    className='font-bold text-xl cursor-pointer'
+                    onClick={() => navigate('/')}
+                    >Clay House</a>
 
                 {!isLoggedin ? (
                     <a onClick={openModal}>Login/Register</a>) 
@@ -102,7 +108,12 @@ function Navbar() {
                 { !mobileMenuOpen ? <Menu /> : <X />}
                 </button>
                 
-                <div className="navbar font-bold text-xl">Clay House</div>
+                <div 
+                    className="navbar font-bold text-xl cursor-pointer" 
+                    onClick={() => navigate('/')}
+                    >
+                    Clay House
+                    </div>
                 
                 {/* Empty div for alignment */}
                 <div className="w-10"></div>
@@ -111,7 +122,7 @@ function Navbar() {
             {mobileMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1">
-                        <div className='navberItem'>
+                        <div className='navberItem' onClick={!isLoggedin ? openModal : () => navigate('/')}>
                             {!isLoggedin ? (
                             <a>Login/Register</a>) 
                             : (
@@ -178,7 +189,7 @@ function Navbar() {
             )}
 
             {/* Modal Backdrop */}
-            {isOpen && (
+            {isLoginModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
 
                     {/* Separate backdrop div with the background */}

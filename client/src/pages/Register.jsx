@@ -1,8 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeClosed } from "lucide-react";
+import axios from 'axios';
+
 
 function Register() {
 
+    
+    const [showPassword, setShowPassword] = useState(false);                // Toggle password visibility
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Toggle password visibility
+    const [pwdMatchErrMsg, setPwdMatchErrMsg] = useState(false);            // Password error message
+    const [confirmationModal, setConfirmationModal] = useState(false);      // Registration Confirmation Modal
+
+    const navigate = useNavigate();
+
+
+    // Form Data
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -10,11 +23,10 @@ function Register() {
         password: '',
     });
 
+    // Confirm Password Input
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [pwdMatchErrMsg, setPwdMatchErrMsg] = useState(false);
     
+    // Form Handle Change
     const handleChange = (id, value) => {
         setFormData({
             ...formData,
@@ -22,17 +34,35 @@ function Register() {
         });
     };
 
-    function handleRegister (e) {
+    // Submit Form
+    function handleRegister(e) {
         e.preventDefault();
-        
-        // If passwords do not match, an error message will appear
+
+        // If passwords do not match, error message appears
         if (formData.password !== confirmPassword){
             setPwdMatchErrMsg(true);
             return;
 
-        } else {
-            alert("Passwords match!");
         }
+        
+        setConfirmationModal(true);
+
+        try {
+            axios.post('/register', formData);
+
+            console.log(formData);
+
+            // Return user to homepage
+            navigate('./');
+        } catch (error) {
+            // Close confirmation modal
+            setConfirmationModal(false);
+            
+            // Log the error for debugging
+            console.error('Registration error:', error);
+        }
+
+    
     };
 
     return(
@@ -54,7 +84,6 @@ function Register() {
                             onChange={(e) => handleChange('name', e.target.value)}
                             placeholder="name"
                             className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                            required
                             />
                     </div>
 
@@ -152,6 +181,40 @@ function Register() {
 
                 </form>
             </div>
+
+            {/* Registration Confirmation Modal */}
+            {confirmationModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-black opacity-50"
+                        // onClick={navigate('/')}
+                        onClick={() => navigate('/')}
+                    ></div>
+
+                    {/* Modal content positioned above the backdrop */}
+                    <div className="bg-white rounded-lg shadow-xl z-10 w-80 max-w-md overflow-hidden">
+                        <div className="px-6 pt-8 pb-4">
+                            <div className="text-center mb-6">
+                                <h3 
+                                    className="text-xl font-bold"
+                                    style={{fontFamily: "'Josefin Sans', sans-serif"}}
+                                > 
+                                    Registration Successful!
+                                </h3>
+                            </div>
+                            
+                            <button 
+                                className="buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
+                                onClick={() => navigate('/')}
+                            >
+                                Ok
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
