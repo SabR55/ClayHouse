@@ -4,7 +4,6 @@ import axios from "axios";
 function ProfileDetails({userID}){
 
     const [isEditing, setIsEditing] = useState(false);  // Toggle editing
-    const [dataSaved, setDataSaved] = useState(false)
 
     const [userData, setUserData] = useState({
         name: '',
