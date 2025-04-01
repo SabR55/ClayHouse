@@ -3,6 +3,9 @@ import axios from "axios";
 
 function ProfileDetails({userID}){
 
+    const [isEditing, setIsEditing] = useState(false);  // Toggle editing
+    const [dataSaved, setDataSaved] = useState(false)
+
     const [userData, setUserData] = useState({
         name: '',
         email: '',
@@ -11,7 +14,13 @@ function ProfileDetails({userID}){
         creditCard: ''
     });
 
-    // const [isEditing, setIsEditing] = useState(false);
+    const [updatedUserData, setUpdatedUserData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        creditCard: ''
+    });
 
     useEffect(() => {
         // Retrieve the user data
@@ -22,12 +31,16 @@ function ProfileDetails({userID}){
                     // Check if data exists
                     if(response.data.data) {
                         
-                        setUserData({
+                        const fetchedData = {
                             name: response.data.data.userName || '',
                             email: response.data.data.userEmail || '',
                             phone: response.data.data.userPhone || '',
                             creditCard: response.data.data.userCreditCard || ''
-                        });
+                        };
+                        
+                        // Set both original and current data
+                        setUserData(fetchedData);
+                        setUpdatedUserData(fetchedData);
                     }
                 })
                 .catch(error => {
@@ -36,12 +49,49 @@ function ProfileDetails({userID}){
         }
     }, [userID]);
 
+    // Handle input changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedUserData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
-    function handleClick(){
-        console.log("User ID:", userID);
-        console.log("User Data:", userData);
+    function handleCancel(){
+
+        setUpdatedUserData(userData);
+        setIsEditing(false);
     }
 
+    // Handle save button - update data
+    const handleSave = () => {
+
+        if (userData.name === updatedUserData.name && 
+            userData.email === updatedUserData.email &&
+            userData.phone === updatedUserData.phone &&
+            userData.password === updatedUserData.password &&
+            userData.creditCard === updatedUserData.creditCard) {
+            return;
+        }
+
+        // Save the updated data to the server
+        axios.put(`/userProfile/${userID}`, {
+            userName: updatedUserData.name,
+            userEmail: updatedUserData.email,
+            userPhone: updatedUserData.phone,
+            userCreditCard: updatedUserData.creditCard
+        })
+        .then(response => {
+            // Update the original data with the new values
+            setUpdatedUserData(response.data);
+            setUserData(response.data);
+            setIsEditing(false);
+        })
+        .catch(error => {
+            console.error('Error updating user profile:', error);
+        });
+    };
     
 
     return(
@@ -54,9 +104,10 @@ function ProfileDetails({userID}){
                     <input 
                         type="text"
                         name="name"
-                        placeholder={userData.name}
+                        value={updatedUserData.name}
+                        onChange={handleChange}
                         className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                        disabled
+                        disabled={!isEditing}
                         required
                     />
                 </div>
@@ -68,9 +119,10 @@ function ProfileDetails({userID}){
                     <input 
                         type="email"
                         name="email"
-                        placeholder={userData.email}
+                        value={updatedUserData.email}
+                        onChange={handleChange}
                         className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                        disabled
+                        disabled={!isEditing}
                         required
                     />
                 </div>
@@ -82,9 +134,10 @@ function ProfileDetails({userID}){
                     <input 
                         type="tel"
                         name="phone"
-                        placeholder={userData.phone}
+                        value={updatedUserData.phone}
+                        onChange={handleChange}
                         className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                        disabled
+                        disabled={!isEditing}
                         required
                     />
                 </div>
@@ -93,12 +146,20 @@ function ProfileDetails({userID}){
                     <label className="block font-medium">
                         Credit Card
                     </label>
-                    <input 
-                        type="password"
-                        name="email"
-                        className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                        disabled
-                    />
+                    {userData.creditCard === '' ? (
+                        <a className="opacity-60 hover:underline">
+                            add credit card
+                        </a>
+                    ) : (
+                        <input 
+                            type="password"
+                            name="creditCard"
+                            value={updatedUserData.creditCard}
+                            onChange={handleChange}
+                            className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
+                            disabled={!isEditing}
+                        />
+                    )}
                 </div>
 
                 <div>   {/* open modal */}
@@ -110,9 +171,31 @@ function ProfileDetails({userID}){
             </form>
 
             <div className="pt-8 w-80 flex justify-end">
-                <button className="buttonBrown w-30 font-medium py-2 px-4 rounded-md shadow cursor-pointer">
-                    edit
-                </button>
+                {!isEditing ? (
+                    <button
+                        className="buttonBrown w-30 font-medium py-2 px-4 rounded-md shadow cursor-pointer"
+                        onClick={() => {setIsEditing(true)}}
+                        >
+                        edit
+                    </button>
+                ) : (
+                    <div>
+                        <button 
+                            className="buttonBrown w-30 font-medium py-2 px-4 mr-4 rounded-md shadow cursor-pointer"
+                            style={{backgroundColor:"#B6A593"}}
+                            onClick={handleCancel}
+                            >
+                            cancel
+                        </button>
+
+                        <button 
+                            className="buttonBrown w-30 font-medium py-2 px-4 rounded-md shadow cursor-pointer"
+                            onClick={handleSave}
+                            >
+                            save
+                        </button>
+                    </div>
+                )}
             </div>
             
         </div>

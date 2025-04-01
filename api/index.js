@@ -152,6 +152,59 @@ app.get('/userProfile/:userID', async (req, res) => {
     }
   });
 
+// -----  Retrieve User Details -----
+app.put('/userProfile/:userID', async (req, res) => {
+  try {
+    const { userID } = req.params;
+    
+    // Validate userID (basic validation example)
+    if (!userID) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'User ID is required' 
+      });
+    }
+    
+    // Extract user data from request body
+    const { userName, userEmail, userPhone, userCreditCard } = req.body;
+    
+    // Find and update the user
+    const updatedUser = await User.findOneAndUpdate(
+      { userID: userID },
+      { 
+        userName, 
+        userEmail, 
+        userPhone, 
+        userCreditCard 
+      },
+      { new: true }
+    );
+    
+    // Check if user exists
+    if (!updatedUser) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+    
+    // Return updated user profile
+    return res.status(200).json({
+      success: true,
+      message: 'User profile updated successfully',
+      data: updatedUser
+    });
+    
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 app.listen(port, () => {
     console.log("Server is running at port " + port)
 })
