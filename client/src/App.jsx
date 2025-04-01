@@ -4,8 +4,6 @@ import Layout from './Layout'
 import Home from './pages/home'
 import Register from './pages/Register'
 import UserProfile from './pages/UserProfile'
-import UpcomingClasses from './pages/UpcomingClasses'
-import ProfileDetails from './pages/ProfileDetails'
 import ErrorPage from './pages/ErrorPage'
 import axios from 'axios'
 

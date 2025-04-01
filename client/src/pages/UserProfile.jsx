@@ -3,64 +3,42 @@ import { useNavigate, useParams } from "react-router-dom";
 import UpcomingClasses from "./UpcomingClasses";
 import PrevClasses from "./PrevClasses";
 import ProfileDetails from "./ProfileDetails";
-import axios from "axios";
 
 function UserProfile() {
     const { section } = useParams(); // Get section from URL
     const navigate = useNavigate();
-    const [userData, setUserData] = useState(null);
+    const [userID, setUserID] = useState(null);
     const [content, setContent] = useState(section || "upcoming-classes");
 
     useEffect(() => {
-        let isMounted = true;
 
         try {
             const storedUserData = localStorage.getItem("userInfo");
-
+    
             if (!storedUserData) {
                 navigate("/errorPage");
                 return;
             }
-
+    
             const userObject = JSON.parse(storedUserData);
-            if (isMounted) {
-                setUserData(userObject);
-            }
-
-            alert(userObject.userID);
-            try {
-                axios.get(`/userProfile/${userObject.userID}`)
-                    .then(response => {
-                    console.log('User profile data:', response.data);
-                    // Process data...
-                  })
-                  .catch(error => {
-                    console.error('Error fetching user profile:', error);
-                    alert('Failed to fetch user profile: ' + error.message);
-                  });
-            } catch (error) {
-            console.error('Error in try block:', error);
-            alert('An error occurred: ' + error.message);
-            }
+            setUserID(userObject.userID);
             
-
         } catch (error) {
             console.error("Error retrieving user data:", error);
-            if (isMounted) {
-                navigate("/errorPage");
-            }
+            navigate("/errorPage");
         }
 
-        return () => {
-            isMounted = false;
-        };
     }, [navigate]);
 
     useEffect(() => {
         if (section) {
             setContent(section);
         }
-    }, [section]);
+
+        if (userID) {
+            console.log("UserID from local storage: " + userID)
+        }
+    }, [section, userID]);
 
     const handleContentChange = (newContent) => {
         setContent(newContent);
@@ -73,7 +51,7 @@ function UserProfile() {
             case "previous-classes":
                 return <PrevClasses />;
             case "profile-details":
-                return <ProfileDetails />;
+                return <ProfileDetails userID={userID}/>;
             default:
                 return <div>Page not found</div>;
         }

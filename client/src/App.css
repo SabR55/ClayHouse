@@ -57,6 +57,10 @@ body {
   border: none;
 }
 
+.inputBox:disabled {
+  background-color: #E2D9CD;
+  }
+
 .buttonBrown {
   background-color: #392E26;
   color: #FCF8F0;

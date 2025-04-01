@@ -27,7 +27,8 @@ app.get('/test', (req, res) => {
     res.json('test ok');
 });
 
-// -----  Retrieve new User. Login -----
+
+// -----  Login -----
 app.post('/login', async (req, res) => {
 
     try {
@@ -94,21 +95,62 @@ app.post('/register', async (req, res) => {
         // Send success response with the created reservation
         res.status(201).json({
             success: true,
-            message: 'Reservation created successfully',
+            message: 'User created successfully',
             data: newUser
         });
         
     } catch (error) {
-        console.error('Reservation creation error:', error);
+        console.error('User creation error:', error);
         
         // Send error response
         res.status(500).json({
             success: false,
-            message: 'Failed to create reservation',
+            message: 'Failed to create user',
             error: error.message
         });
     }
 });
+
+
+// -----  Retrieve User Details -----
+app.get('/userProfile/:userID', async (req, res) => {
+    try {
+      const { userID } = req.params;
+      
+      // Validate userID (basic validation example)
+      if (!userID) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'User ID is required' 
+        });
+      }
+      
+      // Fetch user from database 
+      const user = await User.findOne({userID: userID});
+      
+      // Check if user exists
+      if (!user) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'User not found' 
+        });
+      }
+      
+      // Return user profile
+      return res.status(200).json({
+        success: true,
+        data: user
+      });
+      
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Server error',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
+    }
+  });
 
 app.listen(port, () => {
     console.log("Server is running at port " + port)
