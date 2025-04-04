@@ -23,7 +23,7 @@ body {
 }
 
 .navDropdownItem {
-  padding: 16px 25px;
+  padding: 10px 25px;
   font-weight: 400;
 }
 
@@ -64,4 +64,32 @@ body {
 .buttonBrown {
   background-color: #392E26;
   color: #FCF8F0;
+}
+
+
+/* ----- Calendar ----- */
+.calendar {
+  border: 2px solid #B6A593;
+  overflow: hidden;
+  width: 400px;
+  padding: 20px;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.calendarArrow:hover, .calendarIsSelectable:hover, .calendarSelectedTime, .calendarTime:hover {
+  background-color: #E2D9CD;
+}
+
+.calendarIsSelected {
+  background-color: #6B5B4D;
+}
+
+.isToday {
+  background-color: #E2D9CD;
 }

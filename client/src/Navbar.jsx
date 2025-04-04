@@ -135,8 +135,15 @@ function Navbar() {
                         onMouseEnter={() => setWorkshopOpen(true)}
                         onMouseLeave={() => setWorkshopOpen(false)}
                         >
-                        <a href="#" className="navDropdownItem block py-2">Trial Class</a>
-                        <a href="#" className="navDropdownItem block py-2">Regular Workshops</a>
+                        <a 
+                            className="navDropdownItem block py-2"
+                            onClick={() => navigate('/trial-class')}
+                            >
+                            Trial Class</a>
+                        <a 
+                            className="navDropdownItem block py-2"
+                            onClick={() => navigate('/regular-workshops')}
+                            >Regular Workshops</a>
                     </div>
 
                     
@@ -208,16 +215,16 @@ function Navbar() {
                             {workshopOpen && (
                             <div className="pl-4">
                                 <a
-                                href="#"
-                                className="block navDropdownItem"
-                                >
-                                Trial Class
+                                    className="block navDropdownItem"
+                                    onClick={() => navigate('/trial-class')}
+                                    >
+                                    Trial Class
                                 </a>
                                 <a
-                                href="#"
-                                className="block navDropdownItem"
-                                >
-                                Regular Workshops
+                                    className="block navDropdownItem"
+                                    onClick={() => navigate('/regular-workshops')}
+                                    >
+                                    Regular Workshops
                                 </a>
                             </div>
                             )}
