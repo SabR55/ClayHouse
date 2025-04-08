@@ -1,4 +1,4 @@
-
+import { Instagram, Facebook } from "lucide-react";
 
 function Footer() {
     return(
@@ -31,7 +31,10 @@ function Footer() {
                 {/* Social Media */}
                 <div className="flex-1 text-center sm:text-left">
                   <p className="text-lg font-semibold mb-3">Follow us</p>
-                  <p className="mb-2">+65 9800 6700</p>
+                  <div className="flex gap-4 items-center">
+                    <Instagram size={22}/>
+                    <Facebook size={22}/>
+                  </div>
                 </div>
               </div>
             </div>

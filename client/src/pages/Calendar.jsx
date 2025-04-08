@@ -1,16 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function Calendar({workshop}) {
+function Calendar({ workshopID, workshopPrice }) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June', 
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
+    const [userID, setUserID] = useState(null); 
+    const [errMsg, setErrMsg] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const today = new Date();
+
+    useEffect(() => {
+        
+        // Check localStorage for user data when component mounts
+        const getUserFromStorage = () => {
+          
+            const userDataString = localStorage.getItem('userInfo');
+          
+            if (userDataString) {
+                try {
+                const userData = JSON.parse(userDataString);
+                if (userData.userName) {
+                    setUserID(userData.userID);
+                }
+                } catch (error) {
+                console.error('Error parsing user data from localStorage:', error);
+                }
+            }
+        };
+        
+        getUserFromStorage();
+    }, []);
     
     // Calculate tomorrow and one month ahead dates
     const tomorrow = new Date();
@@ -61,20 +87,56 @@ function Calendar({workshop}) {
         setSelectedTime(time);
     };
 
+    const navigate = useNavigate();
+
     const handleBooking = () => {
-        // Navigate to a new page with the booking details
-        // This is a placeholder - you would implement actual navigation here
+
         const bookingDetails = {
             date: formatDate(selectedDate),
             time: selectedTime,
-            workshop: workshop
+            workshopID: workshopID,
+            workshopPrice: workshopPrice
+        };
+    
+        if (userID != null && workshopID == "001") {
+            return axios.get(`/trial-class-userID/${userID}`)
+                .then(response => {
+                    if(response.data.num == 2) {
+                        navigate("/workshop-payment", { state: bookingDetails });
+
+                    } else if (response.data.num == 1) {
+                        setErrMsg(true)
+                        return;
+                    }
+                    
+                })
+                .catch(err => {
+                    console.log("Error: " + err);
+                });
+        } else if ( userID!=null ) {
+            return axios.post(`/book-workshop/${userID}`, bookingDetails)
+                .then(response => {
+                    console.log(response.data)
+                    navigate('/profile/upcoming-classes')
+
+                })
+                .catch(err => {
+                    console.log("Error: " + err);
+                });
+        }
+
+        navigate("/workshop-payment", { state: bookingDetails });
+    };
+
+    const getWorkshopName = (workshopID) => {
+        const workshopMap = {
+          '001': 'Trial Class Workshop',
+          '002': 'Regular Hand Throwing Workshop',
+          '003': 'None'
         };
         
-        // Example of how you might navigate in a real app
-        // window.location.href = `/booking-confirmation?date=${encodeURIComponent(bookingDetails.date)}&time=${encodeURIComponent(bookingDetails.time)}&workshop=${encodeURIComponent(bookingDetails.workshop)}`;
-        
-        alert(`Booking confirmed for ${bookingDetails.date} at ${bookingDetails.time} for workshop ${bookingDetails.workshop}`);
-    };
+        return workshopMap[workshopID] || workshopID;
+      };
 
     const renderDays = () => {
         const year = currentDate.getFullYear();
@@ -86,7 +148,7 @@ function Calendar({workshop}) {
         
         // Add empty cells for days before the first day of the month
         for (let i = 0; i < firstDay; i++) {
-            days.push(<div key={`empty-${i}`} className="empty p-2"></div>);
+            days.push(<div key={`empty-${i}`} className="empty p-1 md:p-2"></div>);
         }
         
         // Add cells for each day of the month
@@ -108,7 +170,7 @@ function Calendar({workshop}) {
                 <div 
                     key={`day-${i}`}
                     onClick={() => isSelectable && handleDateClick(i)}
-                    className={`day w-10 h-10 flex items-center justify-center
+                    className={`day w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-sm md:text-base
                         ${isToday ? 'isToday font-semibold rounded-full' : ''} 
                         ${isSelected ? 'calendarIsSelected text-white font-semibold' : ''}
                         ${isSelectable ? 'cursor-pointer calendarIsSelectable rounded-full' : 'text-gray-300 cursor-not-allowed'}
@@ -133,13 +195,12 @@ function Calendar({workshop}) {
         // Determine which time slots to show based on workshop value
         let timeSlots = [];
         
-        if (workshop === "001") {
-            // For workshop 001, only show 12pm
+        if (workshopID === "001") {
+            // 001 is Trial Class Workshop
             timeSlots = [
                 { time: "12pm", slots: 10 }
             ];
-        } else if (workshop === "002") {
-            // For workshop 002, show 3pm and 6pm
+        } else if (workshopID === "002" || workshopID ===  "003") {
             timeSlots = [
                 { time: "3pm", slots: 10 },
                 { time: "6pm", slots: 10 }
@@ -153,70 +214,71 @@ function Calendar({workshop}) {
         }
 
         return (
-            <div className="mt-4">
+            <div className="mt-4 w-full">
                 <div className="flex flex-col space-y-4">
                     {timeSlots.map((slot, index) => (
                         <div 
                             key={index}
                             onClick={() => handleTimeClick(slot.time)}
-                            className={`p-4 border calendarTime rounded-lg cursor-pointer flex items-center justify-between
+                            className={`p-3 md:p-4 border calendarTime rounded-lg cursor-pointer flex items-center justify-between
                                 ${selectedTime === slot.time ? 'border-2 calendarSelectedTime' : ''}
                             `}
                         >
                             <div className="flex items-center">
                                 <span className="font-medium">{slot.time}</span>
                             </div>
-                            <span className="text-sm text-gray-500">{slot.slots} slots</span>
+                            <span className="text-xs md:text-sm text-gray-500">{slot.slots} slots</span>
                         </div>
                     ))}
                 </div>
 
                 {selectedTime && (
-                    <button 
-                        onClick={handleBooking}
-                        className="mt-6 buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
-                    >
-                        Book
-                    </button>
+                    <div>
+                        <button 
+                            onClick={handleBooking}
+                            className="mt-6 buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
+                        >
+                            Book
+                        </button>
+                        <p className='pt-4 text-red-700 text-center' style={{ display: errMsg ? "block" : "none" }}>You have booked a trial class before</p>
+                    </div>
                 )}
             </div>
         );
     };
     
     return(
-        <div
-            className="flex flex-col justify-center items-center"
-            >
+        <div className="flex flex-col justify-center items-center w-full px-4 md:px-6">
             <div className="flex justify-center w-full">
-                <div className='flex gap-8'>
-                    <div>
-                        <div className="py-8 mb-4 calendar rounded-lg">
-                            <div className="calendarHeader flex justify-between items-center mb-4">
+                <div className="flex flex-col lg:flex-row gap-4 max-w-4xl">
+                    <div className="w-full lg:w-1/2">
+                        <div className="py-4 md:py-8 mb-4 calendar rounded-lg">
+                            <div className="calendarHeader flex justify-between items-center mb-4 px-2">
                                 <div 
                                     id="calendarPrev"
-                                    className="calendarArrow p-2 rounded-full cursor-pointer hover:bg-gray-100"
+                                    className="calendarArrow p-1 md:p-2 rounded-full cursor-pointer hover:bg-gray-100"
                                     onClick={prevMonth}
                                 >
-                                    <ChevronLeft size={22} />
+                                    <ChevronLeft size={20} />
                                 </div>
 
                                 <div 
                                     id="calendarMthYr"
-                                    className="text-lg font-semibold"
+                                    className="text-base md:text-lg font-semibold"
                                 >
                                     {months[currentDate.getMonth()]} {currentDate.getFullYear()}
                                 </div>
 
                                 <div
                                     id="calendarNext" 
-                                    className="calendarArrow p-2 rounded-full cursor-pointer hover:bg-gray-100"
+                                    className="calendarArrow p-1 md:p-2 rounded-full cursor-pointer hover:bg-gray-100"
                                     onClick={nextMonth}
                                 >
-                                    <ChevronRight size={22} />
+                                    <ChevronRight size={20} />
                                 </div>
                             </div>
 
-                            <div className="calendarWeekdays grid grid-cols-7 text-center font-medium border-b pb-2 mb-2">
+                            <div className="calendarWeekdays grid grid-cols-7 text-center text-xs md:text-sm font-medium border-b pb-2 mb-2">
                                 <div>Sun</div>
                                 <div>Mon</div>
                                 <div>Tue</div>
@@ -231,16 +293,16 @@ function Calendar({workshop}) {
                             </div>
                         </div>
 
-                        <div>
+                        <div className="text-md mt-2">
                             <p>* Bookings are only available 1 month in advance</p>
                         </div>
                     </div>
 
-                    <div className="border p-8 flex flex-col rounded-lg" style={{width:"400px", height:"383px"}}>
+                    <div className="border selectedDate p-4 md:p-8 flex flex-col rounded-lg w-full lg:w-1/2">
                         <div className="text-center mb-4">
-                            <p className="text-lg font-medium mb-2">Selected Date:</p>
-                            <p className="text-xl">{formatDate(selectedDate)}</p>
-                            {workshop && <p className="text-sm text-gray-500 mt-1">Workshop: {workshop}</p>}
+                            <p className="text-base md:text-lg font-medium mb-2">Selected Date:</p>
+                            <p className="text-lg md:text-xl">{formatDate(selectedDate)}</p>
+                            <p className="opacity-80">{getWorkshopName(workshopID)}</p>
                         </div>
                         
                         {/* Render time slots if a date is selected */}

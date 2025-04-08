@@ -89,67 +89,65 @@ function LoginModal({ closeModal }) {
 
             {/* Modal Body */}
             <div className="px-12 flex justify-center">
-            <div className="pt-4 pb-8 w-60">
-                <form onSubmit={handleLogin}>
-                {/* Email Input */}
-                <div className="mb-6">
-                    <label htmlFor="email" className="block font-medium">
-                    Email
-                    </label>
-                    <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                    placeholder="email"
-                    required
-                    />
+                <div className="pt-4 pb-8 w-60">
+                    <form onSubmit={handleLogin}>
+                    {/* Email Input */}
+                    <div className="mb-6">
+                        <label htmlFor="email" className="block font-medium">
+                        Email
+                        </label>
+                        <input
+                        type="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={(e) => handleChange('email', e.target.value)}
+                        className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
+                        placeholder="email"
+                        required
+                        />
+                    </div>
+
+                    {/* Password Input */}
+                    <div className="mb-6">
+                        <label htmlFor="password" className="block font-medium">
+                        Password
+                        </label>
+                        <input
+                        type="password"
+                        id="password"
+                        value={formData.password}
+                        onChange={(e) => handleChange('password', e.target.value)}
+                        className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
+                        placeholder="password"
+                        required
+                        />
+
+                        {/* Error message visible when passwords do not match */}
+                        {loginErr && (
+                            <div className="pt-2">
+                                <a className="text-red-700">{loginErr}</a>
+                            </div>
+                        )}
+                    </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
+                        >
+                            Login
+                        </button>
+                    </form>
+
+                    {/* Register Link */}
+                    <div className="mt-2 text-center flex justify-center block">
+                        <p className="text-gray-600">
+                            <Link to={"/register"} className="text-sm opacity-80" onClick={closeModal} >
+                                Register here!
+                            </Link>
+                        </p>
+                    </div>
                 </div>
-
-                {/* Password Input */}
-                <div className="mb-6">
-                    <label htmlFor="password" className="block font-medium">
-                    Password
-                    </label>
-                    <input
-                    type="password"
-                    id="password"
-                    value={formData.password}
-                    onChange={(e) => handleChange('password', e.target.value)}
-                    className="inputBox w-full pt-2 focus:ring-0 outline-none appearance-none"
-                    placeholder="password"
-                    required
-                    />
-
-                    {/* Error message visible when passwords do not match */}
-                    {loginErr && (
-                        <div className="pt-2">
-                            <a className="text-red-700">{loginErr}</a>
-                        </div>
-                    )}
-                </div>
-
-                
-
-                {/* Submit Button */}
-                <button
-                    type="submit"
-                    className="buttonBrown w-full font-medium py-2 rounded-md shadow cursor-pointer"
-                >
-                    Login
-                </button>
-                </form>
-
-                {/* Register Link */}
-                <div className="mt-2 text-center flex justify-center block">
-                    <p className="text-gray-600">
-                        <Link to={"/register"} className="text-sm opacity-80" onClick={closeModal} >
-                            Register here!
-                        </Link>
-                    </p>
-                </div>
-            </div>
             </div>
         </div>
     );

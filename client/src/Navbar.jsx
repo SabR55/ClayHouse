@@ -5,11 +5,9 @@ import LoginModal from './pages/LoginModal';
 
 function Navbar() {
     
-    //const [isLoggedin, setLoggedIn] = useState(false);              // Check login status
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);    // Toggle mobile menu open/close
 
     const [workshopOpen, setWorkshopOpen] = useState(false);        // Toggle Workshops dropdown menu
-    const [rentalsOpen, setRentalsOpen] = useState(false);          // Toggle Rentals dropdown menu
     const [userOpen, setUserOpen] = useState(false);
 
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);// Login modal open/close
@@ -37,28 +35,18 @@ function Navbar() {
                 } catch (error) {
                 console.error('Error parsing user data from localStorage:', error);
                 }
-          }
+            }
         };
         
         getUserFromStorage();
     }, []);
     
-    const toggleWorkshop = () => {
-        setWorkshopOpen(!workshopOpen);
-        if (rentalsOpen) setRentalsOpen(false);
-    };
-
-    const toggleRentals = () => {
-        setRentalsOpen(!rentalsOpen);
-        if (workshopOpen) setWorkshopOpen(false);
-    };
-
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
     function toProfile() {
-        navigate('/profile');
+        navigate('/profile/book-classes');
     }
 
     function handleLogout() {
@@ -81,7 +69,7 @@ function Navbar() {
                     >Clay House</a>
 
                 {(userName == null) ? (
-                    <a onClick={openModal}>Login/Register</a>) 
+                    <a className="cursor-pointer" onClick={openModal}>Login/Register</a>) 
                     : (
                         <div 
                             className="relative group"
@@ -100,14 +88,14 @@ function Navbar() {
                             >
                                 <a className="navDropdownItem userDropdown block">
                                     <div 
-                                        className="flex items-center justify-end px-4"
+                                        className="flex items-center justify-end px-4 cursor-pointer"
                                         onClick={toProfile}>
                                         Profile
                                     </div>
                                 </a>
                                 <a className="navDropdownItem userDropdown block">
                                     <div 
-                                        className="flex items-center justify-end px-4"
+                                        className="flex items-center justify-end px-4 cursor-pointer"
                                         onClick={handleLogout}>
                                         Logout
                                     </div>
@@ -149,28 +137,9 @@ function Navbar() {
                     
                 </div>
 
-                <div 
-                    className="navberItem relative group"
-                    onMouseEnter={() => setRentalsOpen(true)}
-                    onMouseLeave={() => setRentalsOpen(false)}>
-
-                    <div className='flex items-center'>
-                        <a className='pr-1'>Rentals</a>
-                        <ChevronDown size={18} />
-                    </div>
-
-                    <div 
-                        className={`absolute left-0 w-50 bg-white shadow-lg ${rentalsOpen ? 'block' : 'hidden'}`}
-                        onMouseEnter={() => setRentalsOpen(true)}
-                        onMouseLeave={() => setRentalsOpen(false)}
-                        >
-                        <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Kiln Rental</a>
-                        <a href="#" className="navDropdownItem block py-2" style={{paddingLeft:"25px"}}>Studio Rental</a>
-                    </div>
-                </div>
-
-                <a className='navberItem'>FAQ</a>
-                <a className='navberItem'>Contact</a>
+               
+                <a className='navberItem' onClick={() => {navigate('/about')}}>About</a>
+                <a className='navberItem' onClick={() => {navigate('/contact-us')}} >Contact</a>
             </div>
 
             {/* Mobile Navigation */}
@@ -196,7 +165,7 @@ function Navbar() {
             {mobileMenuOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-3 space-y-1">
-                        <div className='navberItem' onClick={(userName == null) ? openModal : toProfile }>
+                        <div className='navberItem cursor-pointer' onClick={(userName == null) ? openModal : toProfile }>
                             {(userName == null) ? (
                             <a>Login/Register</a>) 
                             : (
@@ -230,34 +199,9 @@ function Navbar() {
                             )}
                         </div>
 
-                        <div>
-                            <button
-                            onClick={toggleRentals}
-                            className="navberItem w-full text-left flex justify-between items-center"
-                            >
-                            Rentals
-                            {rentalsOpen ? <ChevronUp size={18} /> : <ChevronDown size={18}/>}
-                            </button>
-                            {rentalsOpen && (
-                            <div className="pl-4">
-                                <a
-                                href="#"
-                                className="block navDropdownItem"
-                                >
-                                Kiln Rental
-                                </a>
-                                <a
-                                href="#"
-                                className="block navDropdownItem"
-                                >
-                                Studio Rental
-                                </a>
-                            </div>
-                            )}
-                        </div>
-
-                        <a className='navberItem block'>FAQ</a>
-                        <a className='navberItem block'>Contact</a>
+                        
+                        <a className='navberItem block' onClick={() => {navigate('/about')}}>About</a>
+                        <a className='navberItem block' onClick={() => {navigate('/contact-us')}}>Contact</a>
                         {(userName != null) && 
                             <a 
                                 className='navberItem block'

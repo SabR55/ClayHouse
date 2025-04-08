@@ -3,7 +3,7 @@ import Calendar from "./Calendar";
 function TrialClass() {
     return(
         <div>
-            <div className="relative">
+            <div className="relative -z-1">
                 <img 
                     className="px-[10%] w-full"
                     src="/src/assets/images/trialClass-hero.jpg" 
@@ -11,7 +11,7 @@ function TrialClass() {
 
                 <div className="absolute inset-0 flex items-center justify-center">
                     <p 
-                        className="text-white text-5xl font-medium"
+                        className="text-white text-4xl lg:text-6xl font-medium"
                         style={{fontFamily:"Josefin Sans, sans-serif"}}
                         >
                         Trial Class Workshop
@@ -53,7 +53,7 @@ function TrialClass() {
             <hr className="w-2/3 mx-auto"/>
 
             <div className="w-full pt-12 pb-16 px-[10%]">
-                <Calendar workshop={"001"} />
+                <Calendar workshopID="001" workshopPrice="70" />
             </div>
         </div>
     )

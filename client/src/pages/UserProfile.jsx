@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import UpcomingClasses from "./UpcomingClasses";
-import PrevClasses from "./PrevClasses";
-import ProfileDetails from "./ProfileDetails";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 
 function UserProfile() {
-    const { section } = useParams(); // Get section from URL
     const navigate = useNavigate();
+    const location = useLocation();
     const [userID, setUserID] = useState(null);
-    const [content, setContent] = useState(section || "upcoming-classes");
 
     useEffect(() => {
 
@@ -30,46 +26,6 @@ function UserProfile() {
 
     }, [navigate]);
 
-    useEffect(() => {
-        if (section) {
-            setContent(section);
-        }
-
-        if (userID) {
-            console.log("UserID from local storage: " + userID)
-        }
-    }, [section, userID]);
-
-    const handleContentChange = (newContent) => {
-        setContent(newContent);
-    };
-
-    const renderContent = () => {
-        switch (content) {
-            case "upcoming-classes":
-                return <UpcomingClasses />;
-            case "previous-classes":
-                return <PrevClasses />;
-            case "profile-details":
-                return <ProfileDetails userID={userID}/>;
-            default:
-                return <div>Page not found</div>;
-        }
-    };
-
-    const getTitle = (contentType) => {
-        switch (contentType) {
-            case "upcoming-classes":
-                return "Upcoming Classes";
-            case "previous-classes":
-                return "Previous Classes";
-            case "profile-details":
-                return "Profile Details";
-            default:
-                return "Unknown Page";
-        }
-    };
-
     return (
         <div className="flex flex-row w-full p-4" style={{ padding: "16px 10%" }}>
             {/* Sidebar Menu */}
@@ -77,24 +33,29 @@ function UserProfile() {
                 <div 
                     className="w-48 p-4 flex flex-col space-y-4 rounded-md"
                     style={{backgroundColor:"#E2D9CD"}}>
-                    {["upcoming-classes", "previous-classes", "profile-details"].map((item) => (
-                        <a
-                            key={item}
-                            className={`cursor-pointer hover:underline ${
-                                content === item ? "font-semibold" : ""
-                            }`}
-                            onClick={() => handleContentChange(item)}
+                    {[
+                        { label: "Book Classes", value: "book-classes" },
+                        { label: "Upcoming Classes", value: "upcoming-classes" },
+                        { label: "Previous Classes", value: "previous-classes" },
+                        { label: "Purchases", value: "purchases" },
+                        { label: "Profile Details", value: "profile-details" },
+                    ].map((item) => (
+                        <Link
+                        key={item.value}
+                        to={`/profile/${item.value}`}
+                        className={`cursor-pointer hover:underline ${
+                            location.pathname.includes(item.value) ? "font-semibold" : ""
+                        }`}
                         >
-                            {getTitle(item)}
-                        </a>
+                        {item.label}
+                        </Link>
                     ))}
                 </div>
             </div>
 
             {/* Main Content */}
             <div className="flex-1 mb-4">
-                <h1 className="text-2xl">{getTitle(content)}</h1>
-                <div className="border rounded-md mt-4">{renderContent()}</div>
+                <Outlet context={{ userID }} />
             </div>
         </div>
     );

@@ -93,3 +93,8 @@ body {
 .isToday {
   background-color: #E2D9CD;
 }
+
+.selectedDate {
+  width: 400px;
+  height: 380px;
+}

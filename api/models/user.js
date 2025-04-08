@@ -10,6 +10,6 @@ const UserSchema = new Schema ({
     userCreditCard: String
 });
 
-const ResModel = mongoose.model('users', UserSchema);
+const ResModel = mongoose.model('users', UserSchema, 'users');
 
 module.exports = ResModel;
