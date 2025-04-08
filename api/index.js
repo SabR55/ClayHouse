@@ -7,7 +7,7 @@ const TrialClass = require('./models/trialClassNewUser');
 const Purchase = require('./models/purchase');
 const UserBooking = require('./models/userBooking');
 const UserNumSessions = require('./models/userNumSessions');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const CryptoJS = require('crypto-js');
 const saltRounds = 10;
 require('dotenv').config();
