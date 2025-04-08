@@ -11,9 +11,7 @@
     "nodemon": "^3.1.9"
   },
   "scripts": {
-    "dev": "nodemon app.js",
     "start": "node index.js",
-    "build": "npm rebuild bcrypt --build-from-source",
-    "postinstall": "npm rebuild bcrypt --build-from-source"
+    "dev": "nodemon index.js"
   }
 }
