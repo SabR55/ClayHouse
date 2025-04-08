@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node index.js",
+    "start": "node app.js",
     "build": "npm rebuild bcrypt --build-from-source"
   }
 }
