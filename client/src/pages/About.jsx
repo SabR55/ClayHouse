@@ -163,21 +163,28 @@ function About() {
                 <hr className="pb-8 "/>
                 <h1 className="text-3xl font-bold mb-2">My Other Works</h1>
                 <p>My Resume:&nbsp;
-                    <a className="hover:underline font-semibold"
+                    <a className="hover:underline font-medium"
                         href="https://drive.google.com/drive/folders/1mwNmVUkT0h37h56EGBkJ70shv36mBGWy?usp=sharing" target="_blank"
                         >
                         Sab's Resume
                     </a>
                 </p>
+                <p>Another MERN Project:&nbsp;
+                    <a className="hover:underline font-medium"
+                        href="https://shadownspirits-client.onrender.com/" target="_blank"
+                        >
+                        Shadow & Spirits
+                    </a>
+                </p>
                 <p>Behance:&nbsp;
-                    <a className="hover:underline font-semibold"
+                    <a className="hover:underline font-medium"
                         href="https://www.behance.net/sab_r" target="_blank"
                         >
                         Sab's Behance Page
                     </a>
                 </p>
                 <p>GitHub:&nbsp; 
-                    <a className="hover:underline font-semibold"
+                    <a className="hover:underline font-medium"
                         href="https://github.com/SabR55" target="_blank"
                         >
                         Sab's GitHub Page

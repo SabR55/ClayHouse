@@ -10,7 +10,7 @@ function LoginModal({ closeModal }) {
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
-        email: 'sabr@emil.com',
+        email: 'sabr@email.com',
         password: 'was'
     });
     
