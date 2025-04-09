@@ -6,7 +6,7 @@ function Home() {
         <div className="w-full">
             <img
             className="px-[10%] w-full"
-            src="/client/src/assets/images/home-hero.jpg" />
+            src="client/src/assets/images/home-hero.jpg" />
 
             <div className="flex flex-col items-center text-center py-16 px-10">
                 <hr className="w-2/3" />
