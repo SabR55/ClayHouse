@@ -1,4 +1,4 @@
-
+import images from '../assets/assets.js';
 
 function About() {
     return(
@@ -88,7 +88,7 @@ function About() {
                     <div class="md:w-1/2 p-4">
                         <img 
                             class="w-full"
-                            src="src/assets/images/trialClass-image01.jpg" 
+                            src={images.trialClassImage01}
                             alt="Trial Class Hero Image"
                         />
                     </div>
@@ -152,7 +152,7 @@ function About() {
                     <div className="lg:w-1/3 flex items-center justify-center">
                         <img
                             className="w-2/3 max-w-xs"
-                            src="/src/assets/images/home-book-trial-icon.svg"
+                            src={images.homeBookingIcon}
                             alt="Second image"
                         />
                     </div>

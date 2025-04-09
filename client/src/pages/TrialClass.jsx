@@ -1,4 +1,5 @@
 import Calendar from "./Calendar";
+import images from '../assets/assets.js';
 
 function TrialClass() {
     return(
@@ -6,7 +7,7 @@ function TrialClass() {
             <div className="relative -z-1">
                 <img 
                     className="px-[10%] w-full"
-                    src="/src/assets/images/trialClass-hero.jpg" 
+                    src={images.trialClassHero}
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -23,7 +24,7 @@ function TrialClass() {
                 <div className="flex flex-col md:flex-row gap-8">
                     <div className="w-full md:w-1/3">
                         <img 
-                            src="/src/assets/images/trialClass-image01.jpg"
+                            src={images.trialClassImage01}
                             className="w-full h-auto" 
                         />
                     </div>

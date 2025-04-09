@@ -1,7 +1,7 @@
-// src/components/Workshops.jsx
 import React, { useState, useEffect } from 'react';
 import workshopData from '../data/workshopData';
 import { useNavigate } from 'react-router-dom';
+import images from '../assets/assets.js';
 
 function Workshops() {
     const [userID, setUserID] = useState(null);
@@ -57,7 +57,7 @@ function Workshops() {
             <div className="relative -z-1">
                 <img 
                     className="px-[10%] w-full"
-                    src="/src/assets/images/regularClass-hero.jpg" 
+                    src={images.regWorkshopHero}
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -65,7 +65,7 @@ function Workshops() {
                         className="text-white text-4xl lg:text-6xl font-medium"
                         style={{fontFamily:"Josefin Sans, sans-serif"}}
                     >
-                        Regular Class Workshop
+                        Regular Workshop
                     </p>
                 </div>
             </div>
@@ -77,7 +77,7 @@ function Workshops() {
                         <div className="flex flex-col md:flex-row gap-8">
                             <div className="w-full md:w-1/3">
                                 <img 
-                                    src={workshop.detailImage}
+                                    src={images[workshop.detailImage]}
                                     className="w-full h-auto" 
                                     alt={`${workshop.title} details`}
                                 />

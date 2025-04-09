@@ -7,7 +7,6 @@ function Home() {
         <div className="w-full">
             <img
             className="px-[10%] w-full"
-            // src="/src/assets/images/home-hero.jpg"
             src={images.homeHero}
             />
 
@@ -25,7 +24,7 @@ function Home() {
                         <div className="flex justify-center items-center p-4">
                         <img
                             className="w-full max-w-md"
-                            src="/src/assets/images/home-image01.jpg"
+                            src={images.homeImage01}
                             alt="Home image"
                         />
                         </div>
@@ -50,7 +49,7 @@ function Home() {
                         <div className="flex justify-center items-center p-4 order-1 md:order-2">
                             <img
                             className="w-full max-w-md"
-                            src="/src/assets/images/home-image02.png"
+                            src={images.homeImage02}
                             alt="Second image"
                             />
                         </div>
@@ -62,7 +61,7 @@ function Home() {
             <div className="mt-16 py-16 flex flex-col items-center text-center" style={{backgroundColor:"#E2D9CD"}}>
                 <img
                     className="w-18 mb-4"
-                    src="/src/assets/images/home-book-trial-icon.svg"
+                    src={images.homeBookingIcon}
                     alt="Second image"
                 />
 

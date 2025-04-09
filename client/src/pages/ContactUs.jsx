@@ -1,10 +1,11 @@
+import images from '../assets/assets.js';
 
 function ContactUs() {
     return(
         <div className="flex flex-wrap py-12 px-4 md:px-16 lg:px-24">
             <div className="w-full md:w-1/2 py-2 px-4 md:px-8">
                 <img 
-                src="/src/assets/images/regularClass-image02.jpg"
+                src={images.regWorkshopImage02}
                 alt="Contact us image" 
                 className="w-full rounded-lg shadow-md"
                 />

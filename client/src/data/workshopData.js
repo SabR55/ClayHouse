@@ -1,9 +1,10 @@
 
+
 const workshopData = [
     {
         title: "Wheel Throwing Workshop",
-        image: "/src/assets/images/trialClass-hero.jpg",
-        detailImage: "/src/assets/images/regularClass-image01.jpg",
+        image: "regWorkshopImage01",
+        detailImage: "regWorkshopImage01",
         workshopID: "002",
         WSDesc: "Wheel throwing is the process of forming clay into shapes on a potter's wheel, producing handmade ceramic ware. Sign up for regular class packages of either 5 or 10 to immerse yourself in more in-depth knowledge of making whatever your heart desires.",
         WSSessions: "Guided Wheel-throwing Course: 5 Sessions + 1 Free Glazing Session $300/pax ($60 per class)",
@@ -18,8 +19,8 @@ const workshopData = [
     },
     {
         title: "Hand Building Workshop",
-        image: "/src/assets/images/beginnerCourse-hero.jpg",
-        detailImage: "/src/assets/images/regularClass-image02.jpg",
+        image: "regWorkshopImage02",
+        detailImage: "regWorkshopImage02",
         workshopID: "003",
         WSDesc: "Hand-building is a simple pottery-making technique that involves creating forms using hands, fingers, and tools. By using zero machinery, hand-built pottery is typically unique and highly customizable to your imagination. Sign up for regular class packages of either 5 or 10 to immerse yourself in more in-depth knowledge of making whatever your heart desires.",
         WSSessions: "Guided Hand-building Course: 5 Sessions + 1 Free Glazing Session $280/pax ($56 per class)",
