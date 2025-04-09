@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Menu, Parentheses, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './pages/LoginModal';
 
@@ -43,6 +43,11 @@ function Navbar() {
     
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    // Add missing toggleWorkshop function
+    const toggleWorkshop = () => {
+        setWorkshopOpen(!workshopOpen);
     };
 
     function toProfile() {
@@ -114,7 +119,7 @@ function Navbar() {
 
                     <div className='flex items-center'>
                         <a className='pr-1'>Workshops</a>
-                        <ChevronDown size={18} className='p'/>
+                        <ChevronDown size={18} />
                     </div>
                     
 
@@ -146,7 +151,7 @@ function Navbar() {
             <div className="navbarTopRow md:hidden flex items-center justify-between pr-4">
                 <button
                 onClick={toggleMobileMenu}
-                className="p-4"
+                className="p-4 cursor-pointer"
                 >
                 { !mobileMenuOpen ? <Menu /> : <X />}
                 </button>
@@ -185,13 +190,13 @@ function Navbar() {
                             <div className="pl-4">
                                 <a
                                     className="block navDropdownItem"
-                                    onClick={() => navigate('/trial-class')}
+                                    onClick={() => {navigate('/trial-class'); setMobileMenuOpen(false);}}
                                     >
                                     Trial Class
                                 </a>
                                 <a
                                     className="block navDropdownItem"
-                                    onClick={() => navigate('/regular-workshops')}
+                                    onClick={() => {navigate('/regular-workshops'); setMobileMenuOpen(false);}}
                                     >
                                     Regular Workshops
                                 </a>
@@ -200,8 +205,8 @@ function Navbar() {
                         </div>
 
                         
-                        <a className='navberItem block' onClick={() => {navigate('/about')}}>About</a>
-                        <a className='navberItem block' onClick={() => {navigate('/contact-us')}}>Contact</a>
+                        <a className='navberItem block' onClick={() => {navigate('/about'); setMobileMenuOpen(false);}}>About</a>
+                        <a className='navberItem block' onClick={() => {navigate('/contact-us'); setMobileMenuOpen(false);}}>Contact</a>
                         {(userName != null) && 
                             <a 
                                 className='navberItem block'
