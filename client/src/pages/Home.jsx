@@ -1,4 +1,5 @@
 import { YoutubeIcon } from "lucide-react";
+import images from '../assets/assets.js';
 
 
 function Home() {
@@ -6,7 +7,9 @@ function Home() {
         <div className="w-full">
             <img
             className="px-[10%] w-full"
-            src="/src/assets/images/home-hero.jpg" />
+            // src="/src/assets/images/home-hero.jpg"
+            src={images.homeHero}
+            />
 
             <div className="flex flex-col items-center text-center py-16 px-10">
                 <hr className="w-2/3" />
