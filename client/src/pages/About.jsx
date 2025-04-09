@@ -17,7 +17,7 @@ function About() {
                     <p className="text-2xl font-semibold pt-8">
                         Project Overview
                     </p>
-                    <p className="w-120 text-lg pt-2">
+                    <p className="w-full md:w-2/3 text-lg pt-2">
                         Clay House represents my comprehensive full-stack development capabilities through the creation of a booking platform for a fictional pottery business. This project demonstrates my proficiency in building modern, responsive web applications with a seamless integration between frontend and backend technologies.
                     </p>
                 </div>
